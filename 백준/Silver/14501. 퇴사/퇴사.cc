@@ -21,11 +21,9 @@ int main()
         cin >> t[i] >> p[i];
 
     vector<int> dayMaxProfit(n);    // 해당 날짜부터 상담을 시작하면 얻는 최대 수익
-    for (int i = 0; i < n; i++)
+    for (int day = n; day > 0; day--)
     {
-        int day = n - i;   // 현재
         int idx = day - 1;  // 현재 인덱스
-        
         int nextDay = day + t[idx]; // 다음 상담 날
 
         if (nextDay > LeavingDay)
