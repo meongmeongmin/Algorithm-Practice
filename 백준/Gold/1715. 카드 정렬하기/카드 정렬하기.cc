@@ -14,23 +14,23 @@ int main()
     int n;
     cin >> n;
 
-    priority_queue<int, vector<int>, greater<int>> deckPq;   // 카드 묶음들
+    priority_queue<int, vector<int>, greater<int>> decks;   // 카드 묶음들
     for (int i = 0; i < n; i++)
     {
         int deck;
         cin >> deck;
-        deckPq.push(deck);
+        decks.push(deck);
     }
 
     int compareCount = 0;   // 최소 비교 횟수
-    while (deckPq.size() >= 2)
+    while (decks.size() >= 2)
     {
-        int sum = deckPq.top();
-        deckPq.pop();
-        sum += deckPq.top();
-        deckPq.pop();
+        int sum = decks.top();
+        decks.pop();
+        sum += decks.top();
+        decks.pop();
 
-        deckPq.push(sum);
+        decks.push(sum);
         compareCount += sum;
     }
 
