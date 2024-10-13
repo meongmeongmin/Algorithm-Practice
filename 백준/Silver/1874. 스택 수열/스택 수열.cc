@@ -6,10 +6,10 @@ using namespace std;
 
 int main()
 {
-    #pragma region I/O
+#pragma region I/O
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    #pragma endregion
+#pragma endregion
 
     int n;
     cin >> n;
@@ -31,7 +31,7 @@ int main()
         sequence.push(i);
         operations.emplace_back('+');
 
-        while (sequence.size() > 0 && sequence.top() == nums[idx])
+        while (sequence.empty() == false && sequence.top() == nums[idx])
         {
             sequence.pop();
             operations.emplace_back('-');
@@ -39,7 +39,7 @@ int main()
         }
     }
 
-    if (sequence.size() > 0)
+    if (sequence.empty() == false)
     {
         cout << "NO";
         return 0;
