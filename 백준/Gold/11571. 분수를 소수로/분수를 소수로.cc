@@ -13,21 +13,21 @@ string convertDecimal(int mole, int deno)
 	mole = (mole % deno) * 10;
 
 	int index = decimal.length();
-	map<int, int> seens;
+	map<int, int> frac;
 
 	// 소수점 이하 구하기
 	while (mole > 0)
 	{
 		// 순환 소수 찾음
-		if (seens.count(mole))
+		if (frac.count(mole))
 		{
-			int start = seens[mole];
+			int start = frac[mole];
 			decimal.insert(start, "(");
 			decimal += ")";
 			return decimal;
 		}
 
-		seens[mole] = index++;
+		frac[mole] = index++;
 		decimal += to_string(mole / deno);
 		mole = (mole % deno) * 10;
 	}
@@ -50,4 +50,5 @@ int main(int argc, char* argv[])
 
 	for (string d : decimals)
 		cout << d << '\n';
+
 }
