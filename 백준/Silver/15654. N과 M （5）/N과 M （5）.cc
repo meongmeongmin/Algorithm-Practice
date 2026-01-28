@@ -8,16 +8,17 @@ int n;
 int m;  // 수열 길이
 
 vector<int> nums;
-vector<int> picked;
+vector<int> answers;
 vector<bool> visited;
-
-vector<vector<int>> answers;
 
 void solve(int toPick)
 {
     if (toPick == m)
     {
-        answers.push_back(picked);
+        for (const int& n : answers)
+            cout << n << ' ';
+        
+        cout << '\n';
         return;
     }
     
@@ -28,9 +29,9 @@ void solve(int toPick)
 
         visited[i] = true;
 
-        picked.emplace_back(nums[i]);
+        answers.emplace_back(nums[i]);
         solve(toPick + 1);
-        picked.pop_back();
+        answers.pop_back();
 
         visited[i] = false;
     }
@@ -61,13 +62,6 @@ int main()
 
     solve(0);
     //sort(seq.begin(), seq.end());
-
-    for (const vector<int>& v : answers)
-    {
-        for (const int& n : v)
-            cout << n << ' ';
-        cout << '\n';
-    }
 
     return 0;
 }
