@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <unordered_set>
 
 using namespace std;
 
@@ -10,7 +9,7 @@ int m;  // 수열 길이
 
 vector<int> nums;
 vector<int> picked;
-unordered_set<int> pickedIdx;
+vector<bool> visited;
 
 vector<vector<int>> answers;
 
@@ -24,16 +23,16 @@ void solve(int toPick)
     
     for (int i = 0; i < n; ++i)
     {
-        if (pickedIdx.count(i))
+        if (visited[i])
             continue;
 
-        pickedIdx.insert(i);
+        visited[i] = true;
 
         picked.emplace_back(nums[i]);
         solve(toPick + 1);
         picked.pop_back();
 
-        pickedIdx.erase(i);
+        visited[i] = false;
     }
 }
 
@@ -44,6 +43,7 @@ int main()
 
     cin >> n >> m;
     nums.resize(n);
+    visited.resize(n, false);
 
     vector<vector<int>> v(2, vector<int>(n));
     for (int i = 0; i < n; ++i)
