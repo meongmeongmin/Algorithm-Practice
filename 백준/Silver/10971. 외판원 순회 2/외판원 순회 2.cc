@@ -7,8 +7,8 @@ using namespace std;
 
 int n;
 
-vector<vector<int>> m;  // 거리 비용
-vector<bool> visited;
+int m[10][10];  // 거리 비용
+bool visited[10];
 
 int solve(int now, int toPick, int dist)
 {
@@ -41,8 +41,6 @@ int main()
     cin.tie(NULL);
 
     cin >> n;
-    m.resize(n, vector<int>(n));
-    visited.resize(n, false);
 
     for (int r = 0; r < n; ++r)
         for (int c = 0; c < n; ++c)
@@ -50,6 +48,5 @@ int main()
 
     visited[0] = true;
     cout << solve(0, 1, 0);
-
     return 0;
 }
