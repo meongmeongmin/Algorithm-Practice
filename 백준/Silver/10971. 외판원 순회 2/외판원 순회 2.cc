@@ -10,8 +10,13 @@ int n;
 int m[10][10];  // 거리 비용
 bool visited[10];
 
+int answer = INT_MAX;
+
 int solve(int now, int toPick, int dist)
 {
+    if (dist >= answer)
+        return answer;
+
     if (toPick == n)
     {
         if (m[now][0] == 0)   // 막힘
@@ -19,8 +24,6 @@ int solve(int now, int toPick, int dist)
 
         return dist + m[now][0];
     }
-
-    int answer = INT_MAX;
 
     for (int next = 0; next < n; ++next)
     {
