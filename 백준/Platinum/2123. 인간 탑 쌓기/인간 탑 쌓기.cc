@@ -12,20 +12,17 @@ int main()
 
     int n;
     cin >> n;
-
+    
     struct people
     {
-        int w;
-        int s;
+        long long w, s; // 몸무게, 버틸 힘
     };
 
     vector<people> peoples(n);
     for (int i = 0; i < n; ++i)
     {
-        int w, s;   // 몸무게, 버틸 힘
-        cin >> w >> s;
-        peoples[i].w = w;
-        peoples[i].s = s;
+        int w, s;
+        cin >> peoples[i].w >> peoples[i].s;
     }
 
     sort(peoples.begin(), peoples.end(),
@@ -33,13 +30,12 @@ int main()
             return p1.w + p1.s < p2.w + p2.s;
         });
     
-    int wSum = 0;
-    int answer = INT_MIN;
-   
-    for (int i = 0; i < n; ++i)
+    long long wSum = 0;
+    long long answer = INT_MIN;
+    for (const people& p : peoples)
     {
-        answer = max(answer, wSum - peoples[i].s);  // 최대 위험도
-        wSum += peoples[i].w;
+        answer = max(answer, wSum - p.s);  // 최대 위험도
+        wSum += p.w;
     }
     
     cout << answer;
