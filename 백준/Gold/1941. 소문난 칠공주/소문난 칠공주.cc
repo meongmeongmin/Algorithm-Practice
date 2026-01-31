@@ -8,8 +8,7 @@ using namespace std;
 
 const int MAX = 5;
 
-enum Type { S, Y }; // 이다솜, 임도연
-Type board[MAX][MAX];
+char board[MAX][MAX];
 
 // 상, 좌, 하, 우
 int dy[4] = { -1, 0, 1, 0 };
@@ -81,7 +80,7 @@ void solve(int idx, int toPick, int sCount)
         return;
 
     picked[idx] = true;
-    solve(idx + 1, toPick + 1, sCount + (board[idx / MAX][idx % MAX] == Type::S));  // 선택 o
+    solve(idx + 1, toPick + 1, sCount + (board[idx / MAX][idx % MAX] == 'S'));  // 선택 o
     picked[idx] = false;
 
     solve(idx + 1, toPick, sCount); // 선택 x
@@ -94,11 +93,7 @@ int main()
 
     for (int r = 0; r < MAX; ++r)
         for (int c = 0; c < MAX; ++c)
-        {
-            char t;
-            cin >> t;
-            board[r][c] = (t == 'Y' ? Type::Y : Type::S);
-        }
+            cin >> board[r][c];
 
     solve(0, 0, 0);
     cout << answer;
