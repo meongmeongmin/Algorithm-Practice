@@ -76,6 +76,9 @@ void solve(int idx, int toPick, int sCount)
         return;
     }
 
+    if (sCount + (7 - toPick) < 4) 
+        return;
+
     if (idx == 25)
         return;
 
