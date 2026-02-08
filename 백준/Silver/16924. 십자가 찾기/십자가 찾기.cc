@@ -18,6 +18,12 @@ int dx[4] = { 0, -1, 0, 1 };
 
 void updateFindCross(int r, int c, int size)
 {
+    if (findCross[r][c] == false)
+    {
+        findCross[r][c] = true;
+        --findCount;
+    }
+
     for (int dir = 0; dir < 4; ++dir)
     {
         int nr = r;
@@ -76,8 +82,10 @@ int main()
     vector<int> yy;
     vector<int> ss;
 
-    for (int r = 1; r < n; ++r)
-        for (int c = 1; c < m; ++c)
+    int rr = n - 1;
+    int cc = m - 1;
+    for (int r = 1; r < rr; ++r)
+        for (int c = 1; c < cc; ++c)
         {
             if (board[r][c] != '*')
                 continue;
@@ -88,7 +96,6 @@ int main()
             {
                 int nr = r + dy[dir];
                 int nc = c + dx[dir];
-
                 if (nr < 0 || nc < 0 || nr >= n || nc >= m || board[nr][nc] != '*')
                 {
                     find = false;
@@ -99,12 +106,6 @@ int main()
             // 가운데의 길이 찾기
             if (find)
             {
-                if (findCross[r][c] == false)
-                {
-                    findCross[r][c] = true;
-                    --findCount;
-                }
-
                 int min = INT_MAX;
                 for (int dir = 0; dir < 4; ++dir)
                 {
