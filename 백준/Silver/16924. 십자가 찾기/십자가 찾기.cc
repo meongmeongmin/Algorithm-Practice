@@ -8,11 +8,34 @@ using namespace std;
 
 int n, m;   // 행, 열
 char board[100][100];
-bool covered[100][100] = { false };
+bool findCross[100][100];
+
+int findCount = 0;
 
 // 상좌하우
 int dy[4] = { -1, 0, 1, 0 };
 int dx[4] = { 0, -1, 0, 1 };
+
+void updateFindCross(int r, int c, int size)
+{
+    for (int dir = 0; dir < 4; ++dir)
+    {
+        int nr = r;
+        int nc = c;
+
+        for (int i = 0; i < size; ++i)
+        {
+            nr += dy[dir];
+            nc += dx[dir];
+
+            if (findCross[nr][nc] == false)
+            {
+                findCross[nr][nc] = true;
+                --findCount;
+            }
+        }
+    }
+}
 
 int findSize(int dir, int nr, int nc)
 {
@@ -38,17 +61,23 @@ int main()
 
     for (int r = 0; r < n; ++r)
         for (int c = 0; c < m; ++c)
+        {
             cin >> board[r][c];
+            if (board[r][c] == '*')
+            {
+                findCross[r][c] = false;
+                ++findCount;
+            }
+            else
+                findCross[r][c] = true;
+        }
 
     vector<int> xx;
     vector<int> yy;
     vector<int> ss;
-    
-    int rr = n - 1;
-    int cc = m - 1;
 
-    for (int r = 1; r < rr; ++r)
-        for (int c = 1; c < cc; ++c)
+    for (int r = 1; r < n; ++r)
+        for (int c = 1; c < m; ++c)
         {
             if (board[r][c] != '*')
                 continue;
@@ -70,18 +99,38 @@ int main()
             // 가운데의 길이 찾기
             if (find)
             {
-                int minSize = INT_MAX;
-                for (int dir = 0; dir < 4; ++dir)
-                    minSize = min(minSize, findSize(dir, r, c));
-
-                for (int s = minSize; s > 0; --s)
+                if (findCross[r][c] == false)
                 {
-                    xx.push_back(r + 1);
-                    yy.push_back(c + 1);
+                    findCross[r][c] = true;
+                    --findCount;
+                }
+
+                int min = INT_MAX;
+                for (int dir = 0; dir < 4; ++dir)
+                {
+                    int size = findSize(dir, r, c);
+                    if (min > size)
+                        min = size;
+                }
+
+                int x = r + 1;
+                int y = c + 1;
+                for (int s = min; s > 0; --s)
+                {
+                    xx.push_back(x);
+                    yy.push_back(y);
                     ss.push_back(s);
                 }
+
+                updateFindCross(r, c, min);
             }
         }
+
+    if (findCount != 0)
+    {
+        cout << -1;
+        return 0;
+    }
 
     int size = xx.size();
     if (size == 0)
@@ -89,36 +138,6 @@ int main()
         cout << -1;
         return 0;
     }
-
-    for (int i = 0; i < size; ++i)
-    {
-        int r = xx[i] - 1;
-        int c = yy[i] - 1;
-        int s = ss[i];
-
-        covered[r][c] = true;
-
-        for (int dir = 0; dir < 4; ++dir)
-        {
-            int nr = r;
-            int nc = c;
-
-            for (int k = 0; k < s; ++k)
-            {
-                nr += dy[dir];
-                nc += dx[dir];
-                covered[nr][nc] = true;
-            }
-        }
-    }
-    
-    for (int r = 0; r < n; ++r)
-        for (int c = 0; c < m; ++c)
-            if (board[r][c] == '*' && covered[r][c] == false)
-            {
-                cout << -1;
-                return 0;
-            }
 
     cout << size << '\n';
     for (int i = 0; i < size; ++i)
