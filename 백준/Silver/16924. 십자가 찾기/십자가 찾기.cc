@@ -1,69 +1,25 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <cmath>
-#include <climits>
 
 using namespace std;
 
-int n, m;   // 행, 열
-char board[100][100];
+char board[101][101];
 bool findCross[100][100];
-
-int findCount = 0;
-
-// 상좌하우
-int dy[4] = { -1, 0, 1, 0 };
-int dx[4] = { 0, -1, 0, 1 };
-
-void updateFindCross(int r, int c, int size)
-{
-    if (findCross[r][c] == false)
-    {
-        findCross[r][c] = true;
-        --findCount;
-    }
-
-    for (int dir = 0; dir < 4; ++dir)
-    {
-        int nr = r;
-        int nc = c;
-
-        for (int i = 0; i < size; ++i)
-        {
-            nr += dy[dir];
-            nc += dx[dir];
-
-            if (findCross[nr][nc] == false)
-            {
-                findCross[nr][nc] = true;
-                --findCount;
-            }
-        }
-    }
-}
-
-int findSize(int dir, int nr, int nc)
-{
-    int ns = 0;
-    while (true)
-    {
-        nr += dy[dir];
-        nc += dx[dir];
-        if (nr < 0 || nc < 0 || nr >= n || nc >= m || board[nr][nc] != '*')
-            break;
-        ++ns;
-    }
-
-    return ns;
-}
 
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
+    cout.tie(NULL);
 
+    // 상좌하우
+    int dy[4] = { -1, 0, 1, 0 };
+    int dx[4] = { 0, -1, 0, 1 };
+
+    int n, m;   // 행, 열
     cin >> n >> m;
+    int findCount = 0;
 
     for (int r = 0; r < n; ++r)
         for (int c = 0; c < m; ++c)
@@ -90,40 +46,61 @@ int main()
             if (board[r][c] != '*')
                 continue;
 
-            // 가운데 찾기
-            bool find = true;
-            for (int dir = 0; dir < 4; ++dir)
+            // 가운데, 길이 찾기
+            int size = 0;
+            while (true)
             {
-                int nr = r + dy[dir];
-                int nc = c + dx[dir];
-                if (nr < 0 || nc < 0 || nr >= n || nc >= m || board[nr][nc] != '*')
+                bool find = true;
+                for (int dir = 0; dir < 4; dir++)
                 {
-                    find = false;
-                    break;
+                    int ny = r + dy[dir] * (size + 1);
+                    int nx = c + dx[dir] * (size + 1);
+                    if (ny < 0 || nx < 0 || ny >= n || nx >= m || board[ny][nx] != '*')
+                    {
+                        find = false;
+                        break;
+                    }
                 }
+                
+                if (!find)
+                    break;
+                
+                size++;
             }
 
-            // 가운데의 길이 찾기
-            if (find)
+            if (size > 0)
             {
-                int min = INT_MAX;
-                for (int dir = 0; dir < 4; ++dir)
-                {
-                    int size = findSize(dir, r, c);
-                    if (min > size)
-                        min = size;
-                }
-
                 int x = r + 1;
                 int y = c + 1;
-                for (int s = min; s > 0; --s)
+
+                if (findCross[r][c] == false)
                 {
-                    xx.push_back(x);
-                    yy.push_back(y);
-                    ss.push_back(s);
+                    findCross[r][c] = true;
+                    --findCount;
                 }
 
-                updateFindCross(r, c, min);
+                for (int dir = 0; dir < 4; ++dir)
+                {
+                    for (int s = size; s > 0; --s)
+                    {
+                        int ny = r + dy[dir] * (s);
+                        int nx = c + dx[dir] * (s);
+
+                        if (findCross[ny][nx] == false)
+                        {
+                            findCross[ny][nx] = true;
+                            --findCount;
+                        }
+
+                        if (dir == 0)
+                        {
+                            xx.emplace_back(x);
+                            yy.emplace_back(y);
+                            ss.emplace_back(s);
+                        }
+                    }
+
+                }
             }
         }
 
@@ -134,12 +111,6 @@ int main()
     }
 
     int size = xx.size();
-    if (size == 0)
-    {
-        cout << -1;
-        return 0;
-    }
-
     cout << size << '\n';
     for (int i = 0; i < size; ++i)
         cout << xx[i] << ' ' << yy[i] << ' ' << ss[i] << '\n';
