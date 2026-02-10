@@ -20,27 +20,20 @@ int main()
         int half = 1 << n - 1;
         int size = half * half;
 
-        if (r < half && c < half)
-        {
-            // 안 더한다
-        }
-        else if (r < half && c >= half)
-        {
-            answer += size * 1;
-            c -= half;
-        }
-        else if (r >= half && c < half)
-        {
-            answer += size * 2;
-            r -= half;
-        }
-        else
-        {
-            answer += size * 3;
-            r -= half;
-            c -= half;
+        int quadrant = 0;
+        if (r >= half) 
+        { 
+            quadrant += 2;
+            r -= half; 
         }
 
+        if (c >= half) 
+        { 
+            quadrant += 1;
+            c -= half; 
+        }
+
+        answer += size * quadrant;
         --n;
     }
 
