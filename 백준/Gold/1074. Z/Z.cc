@@ -5,35 +5,15 @@
 
 using namespace std;
 
-int n;
-int arrSize;
-int base[2][2] = { {0, 1}, {2, 3} };
-
-vector<vector<int>> board;
-int answer = 0;
-
-void solve(int size)
-{
-    if (size == 4)
-    {
-
-        return;
-    }
-
-    solve(size / 2);
-}
-
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
 
-    int r, c;
+    int n, r, c;
     cin >> n >> r >> c;
 
-    board.resize(arrSize, vector<int>(arrSize, -1));
-    
     int answer = 0;
     while (n > 0)
     {
