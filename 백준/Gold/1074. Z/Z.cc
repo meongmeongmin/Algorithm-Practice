@@ -1,9 +1,15 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <cmath>
 
 using namespace std;
+
+int solve(int n, int r, int c)
+{
+    if (n == 0)
+        return 0;
+    return 2 * (r % 2) + (c % 2) + 4 * solve(n - 1, r / 2, c / 2);
+}
 
 int main()
 {
@@ -13,29 +19,5 @@ int main()
 
     int n, r, c;
     cin >> n >> r >> c;
-
-    int answer = 0;
-    while (n > 0)
-    {
-        int half = 1 << n - 1;
-        int size = half * half;
-
-        int quadrant = 0;
-        if (r >= half) 
-        { 
-            quadrant += 2;
-            r -= half; 
-        }
-
-        if (c >= half) 
-        { 
-            quadrant += 1;
-            c -= half; 
-        }
-
-        answer += size * quadrant;
-        --n;
-    }
-
-    cout << answer;
+    cout << solve(n, r, c);
 }
