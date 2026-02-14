@@ -6,43 +6,24 @@ using namespace std;
 
 int main()
 {
-    #pragma region I/O
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    #pragma endregion
-    
+    cout.tie(NULL);
+
+    const int MAX = 15;
+
     int n;
     cin >> n;
-    int LeavingDay = n + 1; // 퇴사 날
+    pair<int, int> arr[MAX];
+    for (int i = 0; i < n; ++i)
+        cin >> arr[i].first >> arr[i].second;
 
-    vector<int> t(n);   // 상담을 완료하는데 걸리는 기간
-    vector<int> p(n);   // 상담을 했을 때 받을 수 있는 금액
-    for (int i = 0; i < n; i++)
-        cin >> t[i] >> p[i];
-
-    vector<int> dayMaxProfit(n);    // 해당 날짜부터 상담을 시작하면 얻는 최대 수익
-    for (int day = n; day > 0; day--)
+    int dp[MAX] = { 0 };
+    for (int i = n - 1; i >= 0; --i)
     {
-        int idx = day - 1;  // 현재 인덱스
-        int nextDay = day + t[idx]; // 다음 상담 날
-
-        if (nextDay > LeavingDay)
-        {
-            dayMaxProfit[idx] = 0; // 상담 불가능
-            continue;
-        }
-
-        dayMaxProfit[idx] = p[idx];
-        
-        int maxProfit = 0;
-        for (int nextIdx = nextDay - 1; nextIdx < n; nextIdx++)
-        {
-            if (dayMaxProfit[nextIdx] != 0 && maxProfit < dayMaxProfit[nextIdx])
-                maxProfit = dayMaxProfit[nextIdx];
-        }
-
-        dayMaxProfit[idx] += maxProfit;
+        int next = i + arr[i].first;
+        dp[i] = next > n ? dp[i + 1] : max(arr[i].second + dp[next], dp[i + 1]);
     }
 
-    cout << *max_element(dayMaxProfit.begin(), dayMaxProfit.end());
+    cout << dp[0];
 }
