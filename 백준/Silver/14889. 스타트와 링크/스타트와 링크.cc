@@ -11,44 +11,41 @@ int R;
 int board[20][20];
 int answer = INT_MAX;
 
-bool start[20];
+vector<int> start, link;
 
-void solve(int idx, int count)
+void solve(int idx, int startSum, int linkSum)
 {
-    if (count == R)
+    if (idx == N)
     {
-        int startSum = 0;
-        int linkSum = 0;
-
-        for (int i = 0; i < N; i++)
-        {
-            for (int j = i + 1; j < N; j++)
-            {
-                if (start[i] && start[j])
-                    startSum += board[i][j] + board[j][i];
-                else if (!start[i] && !start[j])
-                    linkSum += board[i][j] + board[j][i];
-            }
-        }
-
         answer = min(answer, abs(startSum - linkSum));
         if (answer == 0)
         {
             cout << 0;
             exit(0);
         }
-
         return;
     }
 
-    for (int i = idx; i < N; ++i)
+    if (start.size() != R)
     {
-        if (start[i])
-            continue;
+        int newSum = 0;
+        for (const int& oldIdx : start) 
+            newSum += board[idx][oldIdx] + board[oldIdx][idx];
 
-        start[i] = true;
-        solve(i + 1, count + 1);
-        start[i] = false;
+        start.push_back(idx);
+        solve(idx + 1, startSum + newSum, linkSum);
+        start.pop_back();
+    }
+
+    if (link.size() != R)
+    {
+        int newSum = 0;
+        for (const int& oldIdx : link)
+            newSum += board[idx][oldIdx] + board[oldIdx][idx];
+    
+        link.push_back(idx);
+        solve(idx + 1, startSum, linkSum + newSum);
+        link.pop_back();
     }
 }
 
@@ -65,6 +62,6 @@ int main()
         for (int c = 0; c < N; ++c)
             cin >> board[r][c];
     
-    solve(0, 0);
+    solve(0, 0, 0);
     cout << answer;
 }
