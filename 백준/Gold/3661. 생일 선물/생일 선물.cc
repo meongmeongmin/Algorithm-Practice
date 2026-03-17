@@ -20,11 +20,10 @@ int main()
 
         pair<int, int> a[100];  // 금액, 인덱스
         int sum = 0;
-
         for (int idx = 0; idx < n; ++idx)
         {
             cin >> a[idx].first;
-            a[idx].second = idx;
+            a[idx].second = n - idx;
             sum += a[idx].first;
         }
 
@@ -34,28 +33,13 @@ int main()
             continue;
         }
 
-        sort(a, a + n, [](const pair<int, int>& a, const pair<int, int>& b) {
-            if (a.first == b.first)
-                return a.second > b.second;
-            return a.first < b.first;
-        });
-
+        sort(a, a + n);
         int answer[100];
         for (int i = 0; i < n; ++i)
         {
-            int num = n - i;
-            int average = p / num;
-
-            if (a[i].first <= average)
-            {
-                answer[a[i].second] = a[i].first;
-                p -= a[i].first;
-                continue;
-            }
-
-            int r = (p % num > num) ? r % num : 0;
-            answer[a[i].second] = r + average;
-            p -= answer[a[i].second];
+            int idx = n - a[i].second;
+            answer[idx] = min(a[i].first, p / (n - i));
+            p -= answer[idx];
         }
 
         for (int i = 0; i < n; ++i)
