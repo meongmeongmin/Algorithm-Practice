@@ -18,12 +18,14 @@ int main()
 	int n, m;
 	cin >> n >> m;
 
+	long long answer = 0;
 	priority_queue<long long, vector<long long>, greater<long long>> a;
 	for (int i = 0; i < n; ++i)
 	{
 		long long card;
 		cin >> card;
 		a.push(card);
+		answer += card;
 	}
 
 	for (int i = 0; i < m; ++i)
@@ -34,13 +36,7 @@ int main()
 		a.pop();
 		a.push(card);
 		a.push(card);
-	}
-
-	long long answer = 0;
-	while (!a.empty())
-	{
-		answer += a.top();
-		a.pop();
+		answer += card;
 	}
 
 	cout << answer;
