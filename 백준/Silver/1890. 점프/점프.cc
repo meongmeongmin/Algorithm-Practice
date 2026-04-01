@@ -20,14 +20,13 @@ long long solve(int y, int x)
 	if (y == N - 1 && x == N - 1)
 		return 1;
 
-	long long& result = dp[y][x];
-	if (result != -1)
-		return result;
+	if (dp[y][x] != -1)
+		return dp[y][x];
 	
-	result = 0;
-	result += solve(y, x + board[y][x]);
-	result += solve(y + board[y][x], x);
-	return result;
+	dp[y][x] = 0;
+	dp[y][x] += solve(y, x + board[y][x]);
+	dp[y][x] += solve(y + board[y][x], x);
+	return dp[y][x];
 }
 
 int main()
